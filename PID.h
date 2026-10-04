@@ -11,6 +11,9 @@ typedef struct {
 	/* Derivative low-pass filter time constant */
 	float tau;
 
+	/* Error deadband */
+	float deadband;
+
 	/* Output limits */
 	float limMin;
 	float limMax;
