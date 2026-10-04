@@ -10,6 +10,7 @@ void PIDController_Init(PIDController *pid) {
 	pid->prevMeasurement = 0.0f;
 
 	pid->out = 0.0f;
+	pid->deadband = 0.0f;
 
 }
 
@@ -19,6 +20,16 @@ float PIDController_Update(PIDController *pid, float setpoint, float measurement
 	* Error signal
 	*/
     float error = setpoint - measurement;
+
+    if (pid->deadband > 0.0f &&
+        error > -pid->deadband && error < pid->deadband) {
+        pid->integrator = 0.0f;
+        pid->prevError = 0.0f;
+        pid->differentiator = 0.0f;
+        pid->prevMeasurement = measurement;
+        pid->out = 0.0f;
+        return 0.0f;
+    }
 
 
 	/*
